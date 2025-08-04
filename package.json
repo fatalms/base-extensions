@@ -29,7 +29,8 @@
     "editor/context": [
       {
         "command": "open-in-bitbucket.openCurrentFile",
-        "when": "editorTextFocus"
+        "when": "editorTextFocus",
+        "group": "navigation"
       }
     ]
   },
