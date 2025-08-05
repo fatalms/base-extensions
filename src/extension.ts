@@ -46,7 +46,7 @@ export function activate(context: any) {
       const branch = exec('git rev-parse --abbrev-ref HEAD').toString().trim();
 
       const remoteUrl = exec('git config --get remote.origin.url').toString().trim();
-      const match = remoteUrl.match(/git@([^:]+):\d+\/([\w\d_-]+)\/([\w\d_-]+)\.git$/);
+      const match = remoteUrl.match(/git@([^:]+):(?:\d+\/)?([\w\d_-]+)\/([\w\d_-]+)\.git$/);
 
       if (!match) {
         vscode.window.showErrorMessage('❌ Could not parse git remote URL');
