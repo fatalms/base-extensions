@@ -7,19 +7,32 @@ import open from 'open';
 export function activate(context: any) {
   const disposable = vscode.commands.registerCommand('open-in-bitbucket.openCurrentFile', async () => {
     const editor = vscode.window.activeTextEditor;
-    if (!editor) {
-      vscode.window.showWarningMessage('❗ No file selected.');
-      return;
+    let inputPath: string;
+    let inputDir: string;
+    let lineNumber: number | undefined;
+
+    // 🔍 Если открыт редактор — берём путь файла и строку
+    if (editor && editor.document.uri.scheme === 'file') {
+      inputPath = editor.document.uri.fsPath;
+      lineNumber = editor.selection.active.line + 1;
+      inputDir = path.dirname(inputPath);
+    } else {
+      // 🗂 Если файл не выбран — берём путь первой активной папки
+      const workspaceFolders = vscode.workspace.workspaceFolders;
+      if (!workspaceFolders || workspaceFolders.length === 0) {
+        vscode.window.showErrorMessage('❌ No file or workspace folder selected.');
+        return;
+      }
+      inputPath = inputDir = workspaceFolders[0].uri.fsPath;
     }
 
-    const inputPath = editor.document.uri.fsPath;
-    const lineNumber = editor.selection.active.line + 1;
+    vscode.window.showInformationMessage(inputPath);
 
     try {
       const dir = path.dirname(inputPath);
       const target = path.resolve(dir, inputPath);
 
-      const exec = (c: string) => execSync(c, { cwd: path.dirname(inputPath) });
+      const exec = (c: string) => execSync(c, { cwd: inputDir });
 
       const gitRoot = exec('git rev-parse --show-toplevel').toString().trim();
 
@@ -33,7 +46,7 @@ export function activate(context: any) {
       const branch = exec('git rev-parse --abbrev-ref HEAD').toString().trim();
 
       const remoteUrl = exec('git config --get remote.origin.url').toString().trim();
-      const match = remoteUrl.match(/ssh:\/\/git@([^:]+):\d+\/([a-zA-Z0-9_-]+)\/([a-zA-Z0-9_-]+)\.git$/);
+      const match = remoteUrl.match(/git@([^:]+):\d+\/([\w\d_-]+)\/([\w\d_-]+)\.git$/);
 
       if (!match) {
         vscode.window.showErrorMessage('❌ Could not parse git remote URL');
