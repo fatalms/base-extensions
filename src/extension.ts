@@ -11,13 +11,13 @@ export function activate(context: any) {
     let inputDir: string;
     let lineNumber: number | undefined;
 
-    // 🔍 Если открыт редактор — берём путь файла и строку
+    // Если открыт редактор — берём путь файла и строку
     if (editor && editor.document.uri.scheme === 'file') {
       inputPath = editor.document.uri.fsPath;
       lineNumber = editor.selection.active.line + 1;
       inputDir = path.dirname(inputPath);
     } else {
-      // 🗂 Если файл не выбран — берём путь первой активной папки
+      // Если файл не выбран — берём путь первой активной папки
       const workspaceFolders = vscode.workspace.workspaceFolders;
       if (!workspaceFolders || workspaceFolders.length === 0) {
         vscode.window.showErrorMessage('❌ No file or workspace folder selected.');
@@ -54,13 +54,27 @@ export function activate(context: any) {
       }
 
       const host = match[1];
-      const project = match[2].toUpperCase();
+      const project = match[2];
       const repo = match[3];
 
-      const baseUrl = `https://${host}/projects/${project}/repos/${repo}/browse/${fileRelativeToRepo}`;
-      const query = `?at=refs/heads/${branch}`;
-      const anchor = lineNumber ? `#${lineNumber}` : '';
-      const url = `${baseUrl}${query}${anchor}`;
+      let url: string = '';
+
+      console.log('remoteUrl', remoteUrl);
+
+      vscode.window.showInformationMessage('2232', remoteUrl);
+
+      // bitbucket
+      if (remoteUrl.includes("stash")) {
+        const baseUrl = `https://${host}/projects/${project.toUpperCase()}/repos/${repo}/browse/${fileRelativeToRepo}`;
+        const query = `?at=refs/heads/${branch}`;
+        const anchor = lineNumber ? `#${lineNumber}` : '';
+        url = `${baseUrl}${query}${anchor}`;
+      // github
+      } else {
+        const baseUrl = `https://${host}/${project}/${repo}/tree/${branch}/${fileRelativeToRepo}`;
+        const anchor = lineNumber ? `#L${lineNumber}` : '';
+        url = `${baseUrl}${anchor}`;
+      }
 
       vscode.window.setStatusBarMessage(`🔗 Opening in Bitbucket...`, 1500);
       await open(url);
