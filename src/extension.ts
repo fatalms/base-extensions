@@ -4,8 +4,29 @@ import path from 'path';
 import { execSync } from 'child_process';
 import open from 'open';
 
-export function activate(context: any) {
-  const disposable = vscode.commands.registerCommand('open-in-bitbucket.openCurrentFile', async () => {
+export function activate(context: vscode.ExtensionContext) {
+  const disposableOpenInWebstorm = vscode.commands.registerCommand('open-in-bitbucket.openInWebstorm', async () => {
+    const editor = vscode.window.activeTextEditor;
+    let inputPath: string;
+
+    // Если открыт редактор — берём путь файла и строку
+    if (editor && editor.document.uri.scheme === 'file') {
+      inputPath = editor.document.uri.fsPath;
+    } else {
+      // Если файл не выбран — берём путь первой активной папки
+      const workspaceFolders = vscode.workspace.workspaceFolders;
+      if (!workspaceFolders || workspaceFolders.length === 0) {
+        vscode.window.showErrorMessage('❌ No file or workspace folder selected.');
+        return;
+      }
+      inputPath = workspaceFolders[0].uri.fsPath;
+    }
+
+    execSync(`webstorm1 ${inputPath}`);
+    vscode.window.showInformationMessage(inputPath);
+  });
+
+  const disposableOpenCurrentFile = vscode.commands.registerCommand('open-in-bitbucket.openCurrentFile', async () => {
     const editor = vscode.window.activeTextEditor;
     let inputPath: string;
     let inputDir: string;
@@ -83,7 +104,7 @@ export function activate(context: any) {
     }
   });
 
-  context.subscriptions.push(disposable);
+  context.subscriptions.push(disposableOpenCurrentFile, disposableOpenInWebstorm);
 }
 
 export function deactivate() {}

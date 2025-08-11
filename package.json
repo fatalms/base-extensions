@@ -20,12 +20,20 @@
       {
         "command": "open-in-bitbucket.openCurrentFile",
         "title": "Open in Bitbucket"
+      },
+      {
+        "command": "open-in-bitbucket.openInWebstorm",
+        "title": "Open in Webstorm"
       }
     ],
     "keybindings": [
       {
         "command": "open-in-bitbucket.openCurrentFile",
         "key": "alt+b alt+b"
+      },
+      {
+        "command": "open-in-bitbucket.openInWebstorm",
+        "key": "alt+w alt+w"
       }
     ]
   },
