@@ -18,7 +18,7 @@
   "contributes": {
     "commands": [
       {
-        "command": "quick-tools.openCurrentFile",
+        "command": "quick-tools.openCurrentFileInGit",
         "title": "Open in Bitbucket"
       },
       {
@@ -32,12 +32,8 @@
     ],
     "keybindings": [
       {
-        "command": "quick-tools.openCurrentFile",
+        "command": "quick-tools.openCurrentFileInGit",
         "key": "alt+b alt+b"
-      },
-      {
-        "command": "quick-tools.openInWebstorm",
-        "key": "alt+w alt+w"
       }
     ],
     "configuration": {
@@ -58,7 +54,7 @@
   "menus": {
     "editor/context": [
       {
-        "command": "quick-tools.openCurrentFile",
+        "command": "quick-tools.openCurrentFileInGit",
         "when": "editorTextFocus",
         "group": "navigation"
       }

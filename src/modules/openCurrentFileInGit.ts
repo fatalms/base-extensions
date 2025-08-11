@@ -4,8 +4,8 @@ import vscode from 'vscode';
 import fs from 'fs';
 import open from 'open';
 
-export const openCurrentFile = () => {
-    return vscode.commands.registerCommand('quick-tools.openCurrentFile', async () => {
+export const openCurrentFileInGit = () => {
+    return vscode.commands.registerCommand('quick-tools.openCurrentFileInGit', async () => {
         const editor = vscode.window.activeTextEditor;
         let inputPath: string;
         let inputDir: string;
@@ -28,7 +28,7 @@ export const openCurrentFile = () => {
             inputPath = inputDir = workspaceFolders[0].uri.fsPath;
         }
 
-        vscode.window.showInformationMessage('openCurrentFile: ', inputPath);
+        vscode.window.showInformationMessage('openCurrentFileInGit: ', inputPath);
 
         try {
             const dir = path.dirname(inputPath);
