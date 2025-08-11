@@ -1,6 +1,6 @@
 {
-  "name": "open-in-bitbucket",
-  "displayName": "open-in-bitbucket",
+  "name": "quick-tools",
+  "displayName": "quick-tools",
   "description": "",
   "version": "0.0.1",
   "engines": {
@@ -18,36 +18,56 @@
   "contributes": {
     "commands": [
       {
-        "command": "open-in-bitbucket.openCurrentFile",
+        "command": "quick-tools.openCurrentFile",
         "title": "Open in Bitbucket"
       },
       {
-        "command": "open-in-bitbucket.openInWebstorm",
+        "command": "quick-tools.openInWebstorm",
         "title": "Open in Webstorm"
+      },
+      {
+        "command": "quick-tools.open",
+        "title": "QuickOpen (With Exclude Patterns)"
       }
     ],
     "keybindings": [
       {
-        "command": "open-in-bitbucket.openCurrentFile",
+        "command": "quick-tools.openCurrentFile",
         "key": "alt+b alt+b"
       },
       {
-        "command": "open-in-bitbucket.openInWebstorm",
+        "command": "quick-tools.openInWebstorm",
         "key": "alt+w alt+w"
       }
-    ]
+    ],
+    "configuration": {
+      "type": "object",
+      "title": "My Custom Extension",
+      "properties": {
+        "quick-tools.excludePatterns": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "default": ["**/node_modules"],
+          "description": "Glob patterns to exclude from QuickOpen search results."
+        }
+      }
+    }
   },
   "menus": {
     "editor/context": [
       {
-        "command": "open-in-bitbucket.openCurrentFile",
+        "command": "quick-tools.openCurrentFile",
         "when": "editorTextFocus",
         "group": "navigation"
       }
     ]
   },
   "scripts": {
+    "vsce": "vsce package && rm -rf extensions && mkdir -p extensions && mv *.vsix extensions/ && npm run install-all",
     "vscode:prepublish": "npm run package",
+    "install-all": "for ext in extensions/*.vsix; do code --install-extension \"$ext\"; done",
     "compile": "webpack",
     "watch": "webpack --watch",
     "package": "webpack --mode production --devtool hidden-source-map",
@@ -68,13 +88,13 @@
     "ts-loader": "^9.5.2",
     "typescript": "^5.8.3",
     "webpack": "^5.99.7",
-    "webpack-cli": "^6.0.1"
+    "webpack-cli": "^6.0.1",
+    "vscode": "^1.1.37"
   },
   "dependencies": {
     "child_process": "^1.0.2",
     "fs": "^0.0.1-security",
     "open": "^10.1.2",
-    "path": "^0.12.7",
-    "vscode": "^1.1.37"
+    "path": "^0.12.7"
   }
 }

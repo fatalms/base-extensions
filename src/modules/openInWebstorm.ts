@@ -2,7 +2,7 @@ import { execSync } from 'child_process';
 import vscode from 'vscode';
 
 export const openInWebstorm = () => {
-    return vscode.commands.registerCommand('open-in-bitbucket.openInWebstorm', async () => {
+    return vscode.commands.registerCommand('quick-tools.openInWebstorm', async () => {
         const editor = vscode.window.activeTextEditor;
         let inputPath: string;
 
@@ -22,6 +22,6 @@ export const openInWebstorm = () => {
         }
 
         execSync(`webstorm1 ${inputPath}`);
-        vscode.window.showInformationMessage(inputPath);
+        vscode.window.showInformationMessage('openInWebstorm: ', inputPath);
     });
 };
