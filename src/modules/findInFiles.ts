@@ -19,14 +19,14 @@ export const findInFiles = () => {
 
             return ({
                 label: fileName,
-                description: folderPath,
+                description: fullPath,
                 uri,
             });
         });
 
         const pick = await vscode.window.showQuickPick(items, {
             placeHolder: 'Select a file (with exclude patterns applied)',
-            matchOnDescription: false, // 🔹 отключаем поиск по пути
+            matchOnDescription: true,
             matchOnDetail: false,
         });
 
