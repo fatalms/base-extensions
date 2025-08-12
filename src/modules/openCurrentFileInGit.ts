@@ -50,6 +50,23 @@ export const openCurrentFileInGit = () => {
             const branch = exec('git rev-parse --abbrev-ref HEAD').toString()
                 .trim();
 
+            // Проверяем, существует ли ветка на удалёнке
+            const branchExists = Boolean(exec(`git ls-remote --heads origin ${branch}`).toString()
+                .trim());
+
+            let safeBranch = branch;
+
+            if (!branchExists) {
+                // Получаем дефолтную ветку из настроек удалённого репо
+                try {
+                    safeBranch = exec('git remote show origin')
+                        .toString()
+                        .match(/HEAD branch: (.+)/)?.[1] || 'master';
+                } catch {
+                    safeBranch = 'master'; // fallback
+                }
+            }
+
             const remoteUrl = exec('git config --get remote.origin.url').toString()
                 .trim();
             const match = remoteUrl.match(/git@([^:]+):(?:\d+\/)?([\w\d_-]+)\/([\w\d_-]+)\.git$/);
@@ -70,13 +87,13 @@ export const openCurrentFileInGit = () => {
 
             if (remoteUrl.includes('stash')) {
                 const baseUrl = `https://${host}/projects/${project.toUpperCase()}/repos/${repo}/browse/${fileRelativeToRepo}`;
-                const query = `?at=refs/heads/${branch}`;
+                const query = `?at=refs/heads/${safeBranch}`;
                 const anchor = lineNumber ? `#${lineNumber}` : '';
 
                 url = `${baseUrl}${query}${anchor}`;
                 // github
             } else {
-                const baseUrl = `https://${host}/${project}/${repo}/tree/${branch}/${fileRelativeToRepo}`;
+                const baseUrl = `https://${host}/${project}/${repo}/tree/${safeBranch}/${fileRelativeToRepo}`;
                 const anchor = lineNumber ? `#L${lineNumber}` : '';
 
                 url = `${baseUrl}${anchor}`;

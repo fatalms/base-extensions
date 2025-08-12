@@ -45,7 +45,9 @@
           "items": {
             "type": "string"
           },
-          "default": ["**/node_modules"],
+          "default": [
+            "**/node_modules"
+          ],
           "description": "Glob patterns to exclude from QuickOpen search results."
         }
       }
@@ -83,9 +85,9 @@
     "eslint": "^9.25.1",
     "ts-loader": "^9.5.2",
     "typescript": "^5.8.3",
-    "webpack": "^5.99.7",
-    "webpack-cli": "^6.0.1",
-    "vscode": "^1.1.37"
+    "vscode": "^1.1.37",
+    "webpack": "^5.100.1",
+    "webpack-cli": "^6.0.1"
   },
   "dependencies": {
     "child_process": "^1.0.2",
