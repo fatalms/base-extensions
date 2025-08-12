@@ -15,10 +15,12 @@ export const findInFiles = () => {
         const items = uris.map(uri => {
             const fullPath = vscode.workspace.asRelativePath(uri);
             const fileName = path.basename(fullPath);
+            const dirName = path.basename(path.dirname(fullPath));
+            const label = fileName.includes('index') ? `${dirName}/${fileName}` : fileName;
             const folderPath = path.dirname(fullPath);
 
             return ({
-                label: fileName,
+                label,
                 description: fullPath,
                 uri,
             });
