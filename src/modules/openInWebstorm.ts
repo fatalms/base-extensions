@@ -6,6 +6,9 @@ export const openInWebstorm = () => {
         const editor = vscode.window.activeTextEditor;
         let inputPath: string;
 
+        const config = vscode.workspace.getConfiguration('quick-tools.openInWebstorm');
+        const command: string = config.get('command', 'webstorm');
+
         // Если открыт редактор — берём путь файла и строку
         if (editor && editor.document.uri.scheme === 'file') {
             inputPath = editor.document.uri.fsPath;
@@ -21,7 +24,7 @@ export const openInWebstorm = () => {
             inputPath = workspaceFolders[0].uri.fsPath;
         }
 
-        execSync(`webstorm1 ${inputPath}`);
+        execSync(`${command} ${inputPath}`);
         vscode.window.showInformationMessage('openInWebstorm: ', inputPath);
     });
 };

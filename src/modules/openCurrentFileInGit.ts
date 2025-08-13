@@ -83,8 +83,6 @@ export const openCurrentFileInGit = () => {
 
             let url: string = '';
 
-            console.log('remoteUrl', remoteUrl);
-
             if (remoteUrl.includes('stash')) {
                 const baseUrl = `https://${host}/projects/${project.toUpperCase()}/repos/${repo}/browse/${fileRelativeToRepo}`;
                 const query = `?at=refs/heads/${safeBranch}`;
@@ -102,7 +100,7 @@ export const openCurrentFileInGit = () => {
             vscode.window.setStatusBarMessage('🔗 Opening in Bitbucket...', 1500);
             await open(url);
         } catch (err: any) {
-            vscode.window.showErrorMessage(`❌ Error: ${err.message}`, path.dirname(inputPath), 'asdasd');
+            vscode.window.showErrorMessage(`❌ Error: ${err.message}`);
         }
     });
 };

@@ -26,7 +26,7 @@
         "title": "Open in Webstorm"
       },
       {
-        "command": "quick-tools.open",
+        "command": "quick-tools.findFiles",
         "title": "QuickOpen (With Exclude Patterns)"
       }
     ],
@@ -40,7 +40,7 @@
       "type": "object",
       "title": "My Custom Extension",
       "properties": {
-        "quick-tools.excludePatterns": {
+        "quick-tools.findFiles.excludePatterns": {
           "type": "array",
           "items": {
             "type": "string"
@@ -49,6 +49,11 @@
             "**/node_modules"
           ],
           "description": "Glob patterns to exclude from QuickOpen search results."
+        },
+        "quick-tools.openInWebstorm.command": {
+          "type": "string",
+          "default": "webstorm",
+          "description": "Command to open files in Webstorm"
         }
       }
     }

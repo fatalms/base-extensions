@@ -1,9 +1,9 @@
 import path from 'path';
 import vscode from 'vscode';
 
-export const findInFiles = () => {
-    return vscode.commands.registerCommand('quick-tools.open', async () => {
-        const config = vscode.workspace.getConfiguration('quick-tools');
+export const findFiles = () => {
+    return vscode.commands.registerCommand('quick-tools.findFiles', async () => {
+        const config = vscode.workspace.getConfiguration('quick-tools.findFiles');
         const excludePatterns: string[] = config.get('excludePatterns', []);
 
         // Объединяем паттерны в один через запятую
@@ -17,7 +17,6 @@ export const findInFiles = () => {
             const fileName = path.basename(fullPath);
             const dirName = path.basename(path.dirname(fullPath));
             const label = fileName.includes('index') ? `${dirName}/${fileName}` : fileName;
-            const folderPath = path.dirname(fullPath);
 
             return ({
                 label,
