@@ -7,7 +7,7 @@ export function activate(context: vscode.ExtensionContext) {
     context.subscriptions.push(
         openInWebstorm(),
         openCurrentFileInGit(),
-        findFiles()
+        findFiles(context)
     );
 }
 

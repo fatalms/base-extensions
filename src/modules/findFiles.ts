@@ -1,15 +1,12 @@
 import path from 'path';
 import vscode from 'vscode';
 
-export const findFiles = () => {
+export const findFiles = (context: vscode.ExtensionContext) => {
     return vscode.commands.registerCommand('quick-tools.findFiles', async () => {
         const config = vscode.workspace.getConfiguration('quick-tools.findFiles');
         const excludePatterns: string[] = config.get('excludePatterns', []);
 
-        // Объединяем паттерны в один через запятую
         const excludeGlob = excludePatterns.length > 0 ? `{${excludePatterns.join(',')}}` : '';
-
-        // Ищем все файлы, исключая указанные паттерны
         const uris = await vscode.workspace.findFiles('**/*', excludeGlob || undefined);
 
         const items = uris.map(uri => {
@@ -25,14 +22,33 @@ export const findFiles = () => {
             });
         });
 
-        const pick = await vscode.window.showQuickPick(items, {
-            placeHolder: 'Select a file (with exclude patterns applied)',
-            matchOnDescription: true,
-            matchOnDetail: false,
+        // достаём сохранённое значение (или пустое)
+        const lastSearch = context.globalState.get<string>('quickTools.lastSearch', '');
+
+        // создаём QuickPick вручную
+        const qp = vscode.window.createQuickPick<typeof items[0]>();
+
+        qp.items = items;
+        qp.matchOnDescription = true;
+        qp.value = lastSearch;
+        qp.placeholder = 'Select a file (with exclude patterns applied)';
+
+        qp.onDidAccept(() => {
+            const selection = qp.selectedItems[0];
+
+            if (selection) {
+                vscode.window.showTextDocument(selection.uri);
+            }
+            context.globalState.update('quickTools.lastSearch', qp.value); // сохраняем введённый текст
+            qp.hide();
         });
 
-        if (pick) {
-            vscode.window.showTextDocument(pick.uri);
-        }
+        qp.onDidHide(() => {
+            // даже если не выбрали — сохраняем текст
+            context.globalState.update('quickTools.lastSearch', qp.value);
+            qp.dispose();
+        });
+
+        qp.show();
     });
 };
