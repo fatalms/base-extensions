@@ -28,6 +28,10 @@
       {
         "command": "quick-tools.findFiles",
         "title": "QuickOpen (With Exclude Patterns)"
+      },
+      {
+        "command": "quick-tools.autoReveal.forceReveal",
+        "title": "Force Reveal Active File"
       }
     ],
     "keybindings": [
@@ -54,6 +58,11 @@
           "type": "string",
           "default": "webstorm",
           "description": "Command to open files in Webstorm"
+        },
+        "quick-tools.autoReveal": {
+          "type": "boolean",
+          "default": "false",
+          "description": "autoReveal all opened files"
         }
       }
     }
