@@ -3,6 +3,11 @@
   "displayName": "quick-tools",
   "description": "",
   "version": "0.0.1",
+  "author": {
+    "name": "fatalms",
+    "email": "senchacov@gmail.com",
+    "url": "https://github.com/fatalms"
+  },
   "engines": {
     "vscode": "^1.102.0"
   },
