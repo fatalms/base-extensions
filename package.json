@@ -34,12 +34,6 @@
         "title": "Force Reveal Active File"
       }
     ],
-    "keybindings": [
-      {
-        "command": "quick-tools.openCurrentFileInGit",
-        "key": "alt+b alt+b"
-      }
-    ],
     "configuration": {
       "type": "object",
       "title": "My Custom Extension",
